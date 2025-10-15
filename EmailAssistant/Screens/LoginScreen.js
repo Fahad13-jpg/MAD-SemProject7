@@ -18,7 +18,6 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Top Section with Logo */}
       <View style={styles.topSection}>
         <View style={styles.logoContainer}>
           <Text style={styles.logoIcon}>📧</Text>

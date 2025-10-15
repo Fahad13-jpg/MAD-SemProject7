@@ -53,9 +53,8 @@ const SignUpScreen = ({ navigation }) => {
         <Text style={styles.subtitle}>Create your account to get started</Text>
       </View>
 
-      {/* Form */}
       <View style={styles.formContainer}>
-        {/* Full Name Input */}
+     
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Full Name</Text>
           <View style={styles.inputWrapper}>
@@ -70,7 +69,6 @@ const SignUpScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Email Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Email Address</Text>
           <View style={styles.inputWrapper}>
@@ -87,7 +85,6 @@ const SignUpScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Password Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Password</Text>
           <View style={styles.inputWrapper}>
@@ -110,7 +107,6 @@ const SignUpScreen = ({ navigation }) => {
           <Text style={styles.passwordHint}>Must be at least 8 characters</Text>
         </View>
 
-        {/* Confirm Password Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Confirm Password</Text>
           <View style={styles.inputWrapper}>
@@ -126,7 +122,6 @@ const SignUpScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Terms and Conditions Checkbox */}
         <TouchableOpacity 
           style={styles.checkboxContainer}
           onPress={() => setAgreeTerms(!agreeTerms)}
@@ -140,7 +135,6 @@ const SignUpScreen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        {/* Sign Up Button */}
         <TouchableOpacity 
           style={styles.signupButton}
           onPress={handleSignUp}
@@ -148,14 +142,12 @@ const SignUpScreen = ({ navigation }) => {
           <Text style={styles.signupButtonText}>Create Account</Text>
         </TouchableOpacity>
 
-        {/* Divider */}
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>OR SIGN UP WITH</Text>
           <View style={styles.dividerLine} />
         </View>
 
-        {/* Social Sign Up Buttons */}
         <View style={styles.socialContainer}>
           <TouchableOpacity style={styles.socialButtonSmall}>
             <Text style={styles.socialIconLarge}>🔵</Text>
@@ -168,7 +160,6 @@ const SignUpScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Login Link */}
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Already have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
