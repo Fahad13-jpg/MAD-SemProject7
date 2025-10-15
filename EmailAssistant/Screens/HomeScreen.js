@@ -1,409 +1,424 @@
-// HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Card, IconButton, Surface, Avatar, Badge, FAB } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <View style={styles.profilePic}>
-            <Text style={styles.profileText}>👤</Text>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <View style={styles.headerContent}>
+          <View style={styles.headerLeft}>
+            <Avatar.Text
+              size={50}
+              label="JD"
+              style={styles.avatar}
+              labelStyle={styles.avatarLabel}
+            />
+            <View style={styles.greetingContainer}>
+              <Text style={styles.greeting}>Hello, Junaid! </Text>
+              <Text style={styles.subGreeting}>Welcome back to dashboard</Text>
+            </View>
           </View>
-          <View style={styles.headerInfo}>
-            <Text style={styles.greeting}>Hello, User!</Text>
-            <Text style={styles.subGreeting}>Welcome back 👋</Text>
+
+          <View style={styles.headerRight}>
+            <IconButton
+              icon="bell"
+              size={24}
+              iconColor="#FFFFFF"
+              style={styles.notificationButton}
+              onPress={() => {}}
+            />
+            <Badge style={styles.badge} size={8} />
           </View>
         </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <Text style={styles.notificationIcon}>🔔</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>3</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
-      {/* Stats Cards */}
-      <View style={styles.statsSection}>
-        <Text style={styles.sectionTitle}>Email Overview</Text>
-        
-        <View style={styles.statsContainer}>
-          {/* Card 1 */}
-          <View style={[styles.statCard, styles.blueCard]}>
-            <View style={styles.statIcon}>
-              <Text style={styles.statIconText}>📧</Text>
-            </View>
-            <Text style={styles.statNumber}>24</Text>
-            <Text style={styles.statLabel}>Total Emails</Text>
-            <Text style={styles.statBadge}>Today</Text>
-          </View>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <View style={styles.statsSection}>
+          <Card style={styles.statCardLarge} elevation={3}>
+            <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              style={styles.statCardGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <View style={styles.statCardContent}>
+                <View>
+                  <Text style={styles.statLargeNumber}>24</Text>
+                  <Text style={styles.statLargeLabel}>Total Emails Today</Text>
+                  <Text style={styles.statLargeSubtext}>+5 from yesterday</Text>
+                </View>
+                <View style={styles.statIconLarge}>
+                  <Text style={styles.statIconEmoji}>📧</Text>
+                </View>
+              </View>
+            </LinearGradient>
+          </Card>
 
-          {/* Card 2 */}
-          <View style={[styles.statCard, styles.redCard]}>
-            <View style={styles.statIcon}>
-              <Text style={styles.statIconText}>⚠️</Text>
-            </View>
-            <Text style={styles.statNumber}>8</Text>
-            <Text style={styles.statLabel}>Important</Text>
-            <Text style={styles.statBadge}>Urgent</Text>
-          </View>
+          <View style={styles.statsRow}>
+            <Card style={styles.statCard} elevation={2}>
+              <Card.Content style={styles.statCardContentSmall}>
+                <View style={[styles.statIcon, styles.redIcon]}>
+                  <IconButton icon="alert-circle" size={24} iconColor="#fff" />
+                </View>
+                <Text style={styles.statNumber}>8</Text>
+                <Text style={styles.statLabel}>Important</Text>
+              </Card.Content>
+            </Card>
 
-          {/* Card 3 */}
-          <View style={[styles.statCard, styles.greenCard]}>
-            <View style={styles.statIcon}>
-              <Text style={styles.statIconText}>✅</Text>
-            </View>
-            <Text style={styles.statNumber}>16</Text>
-            <Text style={styles.statLabel}>Processed</Text>
-            <Text style={styles.statBadge}>Done</Text>
-          </View>
+            <Card style={styles.statCard} elevation={2}>
+              <Card.Content style={styles.statCardContentSmall}>
+                <View style={[styles.statIcon, styles.greenIcon]}>
+                  <IconButton icon="check-circle" size={24} iconColor="#fff" />
+                </View>
+                <Text style={styles.statNumber}>16</Text>
+                <Text style={styles.statLabel}>Processed</Text>
+              </Card.Content>
+            </Card>
 
-          {/* Card 4 */}
-          <View style={[styles.statCard, styles.purpleCard]}>
-            <View style={styles.statIcon}>
-              <Text style={styles.statIconText}>🤖</Text>
-            </View>
-            <Text style={styles.statNumber}>5</Text>
-            <Text style={styles.statLabel}>Auto-Replied</Text>
-            <Text style={styles.statBadge}>AI</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Quick Actions */}
-      <View style={styles.actionsSection}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.actionBlue]}>
-              <Text style={styles.actionIconText}>📨</Text>
-            </View>
-            <Text style={styles.actionText}>Compose</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.actionOrange]}>
-              <Text style={styles.actionIconText}>📂</Text>
-            </View>
-            <Text style={styles.actionText}>Inbox</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.actionGreen]}>
-              <Text style={styles.actionIconText}>⚙️</Text>
-            </View>
-            <Text style={styles.actionText}>N8N Flow</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionCard}>
-            <View style={[styles.actionIcon, styles.actionPink]}>
-              <Text style={styles.actionIconText}>📊</Text>
-            </View>
-            <Text style={styles.actionText}>Analytics</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Recent Activity */}
-      <View style={styles.activitySection}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All →</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Activity Item 1 */}
-        <View style={styles.activityCard}>
-          <View style={styles.activityIcon}>
-            <Text style={styles.activityEmoji}>✉️</Text>
-          </View>
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>New Email from Prof. Ahmed</Text>
-            <Text style={styles.activityTime}>5 minutes ago</Text>
-          </View>
-          <View style={styles.activityBadge}>
-            <Text style={styles.activityBadgeText}>New</Text>
+            <Card style={styles.statCard} elevation={2}>
+              <Card.Content style={styles.statCardContentSmall}>
+                <View style={[styles.statIcon, styles.purpleIcon]}>
+                  <IconButton icon="robot" size={24} iconColor="#fff" />
+                </View>
+                <Text style={styles.statNumber}>5</Text>
+                <Text style={styles.statLabel}>Auto-Reply</Text>
+              </Card.Content>
+            </Card>
           </View>
         </View>
 
-        {/* Activity Item 2 */}
-        <View style={styles.activityCard}>
-          <View style={styles.activityIcon}>
-            <Text style={styles.activityEmoji}>🤖</Text>
-          </View>
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>Auto-reply sent successfully</Text>
-            <Text style={styles.activityTime}>15 minutes ago</Text>
-          </View>
-          <View style={[styles.activityBadge, styles.successBadge]}>
-            <Text style={styles.activityBadgeText}>Done</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <View style={styles.actionsGrid}>
+            <Surface style={styles.actionCard} elevation={2}>
+              <LinearGradient
+                colors={['#4facfe', '#00f2fe']}
+                style={styles.actionGradient}
+              >
+                <IconButton icon="email-edit" size={28} iconColor="#fff" />
+              </LinearGradient>
+              <Text style={styles.actionLabel}>Compose</Text>
+            </Surface>
+
+            <Surface style={styles.actionCard} elevation={2}>
+              <LinearGradient
+                colors={['#fa709a', '#fee140']}
+                style={styles.actionGradient}
+              >
+                <IconButton icon="inbox" size={28} iconColor="#fff" />
+              </LinearGradient>
+              <Text style={styles.actionLabel}>Inbox</Text>
+            </Surface>
+
+            <Surface style={styles.actionCard} elevation={2}>
+              <LinearGradient
+                colors={['#30cfd0', '#330867']}
+                style={styles.actionGradient}
+              >
+                <IconButton icon="cog" size={28} iconColor="#fff" />
+              </LinearGradient>
+              <Text style={styles.actionLabel}>N8N Flow</Text>
+            </Surface>
+
+            <Surface style={styles.actionCard} elevation={2}>
+              <LinearGradient
+                colors={['#a8edea', '#fed6e3']}
+                style={styles.actionGradient}
+              >
+                <IconButton icon="chart-line" size={28} iconColor="#333" />
+              </LinearGradient>
+              <Text style={styles.actionLabel}>Analytics</Text>
+            </Surface>
           </View>
         </View>
 
-        {/* Activity Item 3 */}
-        <View style={styles.activityCard}>
-          <View style={styles.activityIcon}>
-            <Text style={styles.activityEmoji}>⚙️</Text>
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Recent Activity</Text>
+            <Text style={styles.seeAll}>See All →</Text>
           </View>
-          <View style={styles.activityContent}>
-            <Text style={styles.activityTitle}>N8N workflow processed 12 emails</Text>
-            <Text style={styles.activityTime}>30 minutes ago</Text>
-          </View>
-          <View style={[styles.activityBadge, styles.infoBadge]}>
-            <Text style={styles.activityBadgeText}>Info</Text>
-          </View>
+
+          <Card style={styles.activityCard} elevation={2}>
+            <Card.Content style={styles.activityContent}>
+              <View style={[styles.activityIcon, styles.activityBlue]}>
+                <IconButton icon="email" size={20} iconColor="#fff" />
+              </View>
+              <View style={styles.activityDetails}>
+                <Text style={styles.activityTitle}>New Email from Prof. Ahmed</Text>
+                <Text style={styles.activityTime}>5 minutes ago</Text>
+              </View>
+              <Surface style={styles.activityBadge} elevation={0}>
+                <Text style={styles.badgeText}>New</Text>
+              </Surface>
+            </Card.Content>
+          </Card>
+
+          <Card style={styles.activityCard} elevation={2}>
+            <Card.Content style={styles.activityContent}>
+              <View style={[styles.activityIcon, styles.activityGreen]}>
+                <IconButton icon="robot" size={20} iconColor="#fff" />
+              </View>
+              <View style={styles.activityDetails}>
+                <Text style={styles.activityTitle}>Auto-reply sent successfully</Text>
+                <Text style={styles.activityTime}>15 minutes ago</Text>
+              </View>
+              <Surface style={[styles.activityBadge, styles.successBadge]} elevation={0}>
+                <Text style={styles.badgeText}>Done</Text>
+              </Surface>
+            </Card.Content>
+          </Card>
+
+          <Card style={styles.activityCard} elevation={2}>
+            <Card.Content style={styles.activityContent}>
+              <View style={[styles.activityIcon, styles.activityPurple]}>
+                <IconButton icon="cog-sync" size={20} iconColor="#fff" />
+              </View>
+              <View style={styles.activityDetails}>
+                <Text style={styles.activityTitle}>N8N workflow processed 12 emails</Text>
+                <Text style={styles.activityTime}>30 minutes ago</Text>
+              </View>
+              <Surface style={[styles.activityBadge, styles.infoBadge]} elevation={0}>
+                <Text style={styles.badgeText}>Info</Text>
+              </Surface>
+            </Card.Content>
+          </Card>
         </View>
-      </View>
 
-      {/* Workflow Status */}
-      <View style={styles.workflowSection}>
-        <Text style={styles.sectionTitle}>N8N Workflow Status</Text>
-        
-        <View style={styles.workflowCard}>
-          <View style={styles.workflowHeader}>
-            <View style={styles.workflowInfo}>
-              <Text style={styles.workflowTitle}>Email Filter Workflow</Text>
-              <Text style={styles.workflowSubtitle}>Running smoothly</Text>
-            </View>
-            <View style={styles.statusIndicator}>
-              <View style={styles.statusDot} />
-              <Text style={styles.statusText}>Active</Text>
-            </View>
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>N8N Workflow Status</Text>
+          <Card style={styles.workflowCard} elevation={3}>
+            <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              style={styles.workflowGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <View style={styles.workflowHeader}>
+                <View style={styles.workflowInfo}>
+                  <Text style={styles.workflowTitle}>Email Filter Workflow</Text>
+                  <Text style={styles.workflowSubtitle}>Running smoothly ✨</Text>
+                </View>
+                <View style={styles.statusIndicator}>
+                  <View style={styles.statusDot} />
+                  <Text style={styles.statusText}>Active</Text>
+                </View>
+              </View>
 
-          <View style={styles.workflowStats}>
-            <View style={styles.workflowStat}>
-              <Text style={styles.workflowStatNumber}>24</Text>
-              <Text style={styles.workflowStatLabel}>Processed</Text>
-            </View>
-            <View style={styles.workflowDivider} />
-            <View style={styles.workflowStat}>
-              <Text style={styles.workflowStatNumber}>8</Text>
-              <Text style={styles.workflowStatLabel}>Filtered</Text>
-            </View>
-            <View style={styles.workflowDivider} />
-            <View style={styles.workflowStat}>
-              <Text style={styles.workflowStatNumber}>5</Text>
-              <Text style={styles.workflowStatLabel}>Auto-Replied</Text>
-            </View>
-          </View>
+              <View style={styles.workflowStats}>
+                <View style={styles.workflowStat}>
+                  <Text style={styles.workflowStatNumber}>24</Text>
+                  <Text style={styles.workflowStatLabel}>Processed</Text>
+                </View>
+                <View style={styles.workflowDivider} />
+                <View style={styles.workflowStat}>
+                  <Text style={styles.workflowStatNumber}>8</Text>
+                  <Text style={styles.workflowStatLabel}>Filtered</Text>
+                </View>
+                <View style={styles.workflowDivider} />
+                <View style={styles.workflowStat}>
+                  <Text style={styles.workflowStatNumber}>5</Text>
+                  <Text style={styles.workflowStatLabel}>Auto-Replied</Text>
+                </View>
+              </View>
 
-          <TouchableOpacity style={styles.workflowButton}>
-            <Text style={styles.workflowButtonText}>View Workflow Details</Text>
-          </TouchableOpacity>
+              <Surface style={styles.workflowButton} elevation={0}>
+                <Text style={styles.workflowButtonText}>View Details →</Text>
+              </Surface>
+            </LinearGradient>
+          </Card>
         </View>
-      </View>
 
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIconActive}>🏠</Text>
+        <View style={{ height: 100 }} />
+      </ScrollView>
+
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        color="#fff"
+        onPress={() => {}}
+      />
+
+      <Surface style={styles.bottomNav} elevation={8}>
+        <View style={styles.navItem}>
+          <IconButton icon="home" size={26} iconColor="#667eea" />
           <Text style={styles.navLabelActive}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>📧</Text>
+        </View>
+        <View style={styles.navItem}>
+          <IconButton icon="email-outline" size={26} iconColor="#94A3B8" />
           <Text style={styles.navLabel}>Emails</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>⚙️</Text>
+        </View>
+        <View style={styles.navItem}>
+          <IconButton icon="cog-outline" size={26} iconColor="#94A3B8" />
           <Text style={styles.navLabel}>Workflow</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>👤</Text>
+        </View>
+        <View style={styles.navItem}>
+          <IconButton icon="account-outline" size={26} iconColor="#94A3B8" />
           <Text style={styles.navLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={{ height: 20 }} />
-    </ScrollView>
+        </View>
+      </Surface>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#F8FAFC',
   },
   header: {
+    paddingTop: 50,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 50,
-    backgroundColor: '#FFFFFF',
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
-  profilePic: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#EEF2FF',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
+  avatar: {
+    backgroundColor: '#fff',
   },
-  profileText: {
-    fontSize: 24,
+  avatarLabel: {
+    color: '#667eea',
+    fontWeight: 'bold',
   },
-  headerInfo: {
-    justifyContent: 'center',
+  greetingContainer: {
+    marginLeft: 12,
   },
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: '#FFFFFF',
   },
   subGreeting: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: 12,
+    color: '#E0E7FF',
     marginTop: 2,
   },
-  notificationButton: {
-    width: 45,
-    height: 45,
-    backgroundColor: '#FEF3C7',
-    borderRadius: 22.5,
-    justifyContent: 'center',
-    alignItems: 'center',
+  headerRight: {
     position: 'relative',
   },
-  notificationIcon: {
-    fontSize: 22,
+  notificationButton: {
+    margin: 0,
   },
   badge: {
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: 10,
+    right: 10,
     backgroundColor: '#EF4444',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: 'bold',
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   statsSection: {
     padding: 20,
+    paddingTop: 25,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1F2937',
+  statCardLarge: {
+    borderRadius: 20,
     marginBottom: 15,
+    overflow: 'hidden',
   },
-  statsContainer: {
+  statCardGradient: {
+    padding: 20,
+  },
+  statCardContent: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statLargeNumber: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  statLargeLabel: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginTop: 5,
+    fontWeight: '600',
+  },
+  statLargeSubtext: {
+    fontSize: 12,
+    color: '#E0E7FF',
+    marginTop: 3,
+  },
+  statIconLarge: {
+    width: 70,
+    height: 70,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statIconEmoji: {
+    fontSize: 35,
+  },
+  statsRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   statCard: {
-    width: '48%',
-    padding: 18,
+    flex: 1,
+    marginHorizontal: 4,
     borderRadius: 15,
-    marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
   },
-  blueCard: {
-    backgroundColor: '#DBEAFE',
-  },
-  redCard: {
-    backgroundColor: '#FEE2E2',
-  },
-  greenCard: {
-    backgroundColor: '#D1FAE5',
-  },
-  purpleCard: {
-    backgroundColor: '#EDE9FE',
+  statCardContentSmall: {
+    alignItems: 'center',
+    paddingVertical: 10,
   },
   statIcon: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  statIconText: {
-    fontSize: 20,
-  },
-  statNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 5,
-  },
-  statLabel: {
-    fontSize: 13,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-  statBadge: {
-    fontSize: 10,
-    color: '#9CA3AF',
-    marginTop: 5,
-  },
-  actionsSection: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  actionCard: {
-    width: '23%',
-    alignItems: 'center',
-  },
-  actionIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 15,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
-  actionBlue: {
-    backgroundColor: '#DBEAFE',
+  redIcon: {
+    backgroundColor: '#EF4444',
   },
-  actionOrange: {
-    backgroundColor: '#FED7AA',
+  greenIcon: {
+    backgroundColor: '#10B981',
   },
-  actionGreen: {
-    backgroundColor: '#D1FAE5',
+  purpleIcon: {
+    backgroundColor: '#8B5CF6',
   },
-  actionPink: {
-    backgroundColor: '#FCE7F3',
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1E293B',
   },
-  actionIconText: {
-    fontSize: 26,
+  statLabel: {
+    fontSize: 11,
+    color: '#64748B',
+    marginTop: 2,
+    fontWeight: '500',
   },
-  actionText: {
-    fontSize: 12,
-    color: '#374151',
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  activitySection: {
+  section: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 25,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -411,54 +426,84 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  seeAllText: {
-    fontSize: 13,
-    color: '#4F46E5',
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1E293B',
+  },
+  seeAll: {
+    fontSize: 14,
+    color: '#667eea',
     fontWeight: '600',
   },
+  actionsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+  actionCard: {
+    width: '23%',
+    alignItems: 'center',
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
+  actionGradient: {
+    width: '100%',
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  actionLabel: {
+    fontSize: 11,
+    color: '#475569',
+    fontWeight: '600',
+    marginTop: 8,
+    marginBottom: 8,
+  },
   activityCard: {
+    borderRadius: 15,
+    marginBottom: 12,
+  },
+  activityContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    paddingVertical: 8,
   },
   activityIcon: {
     width: 45,
     height: 45,
-    backgroundColor: '#F3F4F6',
     borderRadius: 22.5,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
-  activityEmoji: {
-    fontSize: 20,
+  activityBlue: {
+    backgroundColor: '#3B82F6',
   },
-  activityContent: {
+  activityGreen: {
+    backgroundColor: '#10B981',
+  },
+  activityPurple: {
+    backgroundColor: '#8B5CF6',
+  },
+  activityDetails: {
     flex: 1,
   },
   activityTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: '#1E293B',
     marginBottom: 3,
   },
   activityTime: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#94A3B8',
   },
   activityBadge: {
     backgroundColor: '#DBEAFE',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   successBadge: {
     backgroundColor: '#D1FAE5',
@@ -466,24 +511,18 @@ const styles = StyleSheet.create({
   infoBadge: {
     backgroundColor: '#EDE9FE',
   },
-  activityBadgeText: {
+  badgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1F2937',
-  },
-  workflowSection: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    color: '#1E293B',
   },
   workflowCard: {
-    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginTop: 15,
+  },
+  workflowGradient: {
     padding: 20,
-    borderRadius: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
   },
   workflowHeader: {
     flexDirection: 'row',
@@ -495,20 +534,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   workflowTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 3,
+    color: '#FFFFFF',
+    marginBottom: 4,
   },
   workflowSubtitle: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: 13,
+    color: '#E0E7FF',
   },
   statusIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
-    paddingHorizontal: 10,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
@@ -522,72 +561,77 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#059669',
+    color: '#FFFFFF',
   },
   workflowStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 15,
+    paddingVertical: 15,
   },
   workflowStat: {
     alignItems: 'center',
   },
   workflowStatNumber: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 5,
+    color: '#FFFFFF',
   },
   workflowStatLabel: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: 11,
+    color: '#E0E7FF',
+    marginTop: 4,
   },
   workflowDivider: {
     width: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   workflowButton: {
-    backgroundColor: '#4F46E5',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
   },
   workflowButtonText: {
-    color: '#FFFFFF',
+    color: '#667eea',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: 'bold',
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 90,
+    backgroundColor: '#667eea',
   },
   bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    marginTop: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
   },
-  navIcon: {
-    fontSize: 24,
-    marginBottom: 5,
-    opacity: 0.5,
-  },
-  navIconActive: {
-    fontSize: 24,
-    marginBottom: 5,
-  },
   navLabel: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: '#94A3B8',
     fontWeight: '500',
+    marginTop: -8,
   },
   navLabelActive: {
     fontSize: 11,
-    color: '#4F46E5',
-    fontWeight: '600',
+    color: '#667eea',
+    fontWeight: '700',
+    marginTop: -8,
   },
 });
 
