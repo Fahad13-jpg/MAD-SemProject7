@@ -1,4 +1,3 @@
-// SignUpScreen.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
@@ -11,7 +10,7 @@ const SignUpScreen = ({ navigation }) => {
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleSignUp = () => {
-    // Simple validation
+   
     if (!fullName || !email || !password || !confirmPassword) {
       alert('Please fill all fields');
       return;
@@ -27,13 +26,13 @@ const SignUpScreen = ({ navigation }) => {
       return;
     }
 
-    // Navigate to Home after successful signup
+  
     navigation.navigate('Home');
   };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
+    
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton}
@@ -44,7 +43,7 @@ const SignUpScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>Create Account</Text>
       </View>
 
-      {/* Welcome Section */}
+     
       <View style={styles.welcomeSection}>
         <View style={styles.iconCircle}>
           <Text style={styles.icon}>🎉</Text>

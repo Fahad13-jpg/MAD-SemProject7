@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 
@@ -8,7 +7,7 @@ const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    // Simple validation
+ 
     if (email && password) {
       navigation.navigate('Home');
     } else {
@@ -26,12 +25,10 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.appSubtitle}>Manage your emails smartly</Text>
       </View>
 
-      {/* Login Form */}
       <View style={styles.formContainer}>
         <Text style={styles.welcomeText}>Welcome Back!</Text>
         <Text style={styles.subtitle}>Login to continue</Text>
 
-        {/* Email Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Email Address</Text>
           <View style={styles.inputWrapper}>
@@ -48,7 +45,6 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Password Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Password</Text>
           <View style={styles.inputWrapper}>
@@ -69,28 +65,21 @@ const LoginScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Forgot Password */}
         <TouchableOpacity style={styles.forgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-
-        {/* Login Button */}
         <TouchableOpacity 
           style={styles.loginButton}
           onPress={handleLogin}
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-
-        {/* Divider */}
         <View style={styles.divider}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>OR</Text>
           <View style={styles.dividerLine} />
         </View>
 
-        {/* Social Login Buttons */}
         <TouchableOpacity style={styles.socialButton}>
           <Text style={styles.socialIcon}>🔵</Text>
           <Text style={styles.socialButtonText}>Continue with Google</Text>
@@ -101,7 +90,6 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.socialButtonText}>Continue with Facebook</Text>
         </TouchableOpacity>
 
-        {/* Sign Up Link */}
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
