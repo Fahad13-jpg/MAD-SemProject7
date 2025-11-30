@@ -1,11 +1,13 @@
+// HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Card, IconButton, Surface, Avatar, Badge, FAB } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      {/* Header with Gradient */}
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.header}
@@ -21,7 +23,7 @@ const HomeScreen = ({ navigation }) => {
               labelStyle={styles.avatarLabel}
             />
             <View style={styles.greetingContainer}>
-              <Text style={styles.greeting}>Hello, Junaid! </Text>
+              <Text style={styles.greeting}>Hello, John! 👋</Text>
               <Text style={styles.subGreeting}>Welcome back to dashboard</Text>
             </View>
           </View>
@@ -32,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
               size={24}
               iconColor="#FFFFFF"
               style={styles.notificationButton}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('Notifications')}
             />
             <Badge style={styles.badge} size={8} />
           </View>
@@ -44,6 +46,7 @@ const HomeScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
+        {/* Stats Section */}
         <View style={styles.statsSection}>
           <Card style={styles.statCardLarge} elevation={3}>
             <LinearGradient
@@ -98,6 +101,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
+        {/* Quick Actions */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.actionsGrid}>
@@ -106,7 +110,12 @@ const HomeScreen = ({ navigation }) => {
                 colors={['#4facfe', '#00f2fe']}
                 style={styles.actionGradient}
               >
-                <IconButton icon="email-edit" size={28} iconColor="#fff" />
+                <IconButton 
+                  icon="email-edit" 
+                  size={28} 
+                  iconColor="#fff"
+                  onPress={() => navigation.navigate('ComposeEmail')}
+                />
               </LinearGradient>
               <Text style={styles.actionLabel}>Compose</Text>
             </Surface>
@@ -116,7 +125,12 @@ const HomeScreen = ({ navigation }) => {
                 colors={['#fa709a', '#fee140']}
                 style={styles.actionGradient}
               >
-                <IconButton icon="inbox" size={28} iconColor="#fff" />
+                <IconButton 
+                  icon="inbox" 
+                  size={28} 
+                  iconColor="#fff"
+                  onPress={() => navigation.navigate('EmailList')}
+                />
               </LinearGradient>
               <Text style={styles.actionLabel}>Inbox</Text>
             </Surface>
@@ -126,7 +140,12 @@ const HomeScreen = ({ navigation }) => {
                 colors={['#30cfd0', '#330867']}
                 style={styles.actionGradient}
               >
-                <IconButton icon="cog" size={28} iconColor="#fff" />
+                <IconButton 
+                  icon="cog" 
+                  size={28} 
+                  iconColor="#fff"
+                  onPress={() => navigation.navigate('Workflow')}
+                />
               </LinearGradient>
               <Text style={styles.actionLabel}>N8N Flow</Text>
             </Surface>
@@ -136,20 +155,35 @@ const HomeScreen = ({ navigation }) => {
                 colors={['#a8edea', '#fed6e3']}
                 style={styles.actionGradient}
               >
-                <IconButton icon="chart-line" size={28} iconColor="#333" />
+                <IconButton 
+                  icon="chart-line" 
+                  size={28} 
+                  iconColor="#333"
+                  onPress={() => {}}
+                />
               </LinearGradient>
               <Text style={styles.actionLabel}>Analytics</Text>
             </Surface>
           </View>
         </View>
 
+        {/* Recent Activity */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Recent Activity</Text>
-            <Text style={styles.seeAll}>See All →</Text>
+            <Text 
+              style={styles.seeAll}
+              onPress={() => navigation.navigate('Notifications')}
+            >
+              See All →
+            </Text>
           </View>
 
-          <Card style={styles.activityCard} elevation={2}>
+          <Card 
+            style={styles.activityCard} 
+            elevation={2}
+            onPress={() => navigation.navigate('EmailList')}
+          >
             <Card.Content style={styles.activityContent}>
               <View style={[styles.activityIcon, styles.activityBlue]}>
                 <IconButton icon="email" size={20} iconColor="#fff" />
@@ -179,7 +213,11 @@ const HomeScreen = ({ navigation }) => {
             </Card.Content>
           </Card>
 
-          <Card style={styles.activityCard} elevation={2}>
+          <Card 
+            style={styles.activityCard} 
+            elevation={2}
+            onPress={() => navigation.navigate('Workflow')}
+          >
             <Card.Content style={styles.activityContent}>
               <View style={[styles.activityIcon, styles.activityPurple]}>
                 <IconButton icon="cog-sync" size={20} iconColor="#fff" />
@@ -195,9 +233,14 @@ const HomeScreen = ({ navigation }) => {
           </Card>
         </View>
 
+        {/* Workflow Status */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>N8N Workflow Status</Text>
-          <Card style={styles.workflowCard} elevation={3}>
+          <Card 
+            style={styles.workflowCard} 
+            elevation={3}
+            onPress={() => navigation.navigate('Workflow')}
+          >
             <LinearGradient
               colors={['#667eea', '#764ba2']}
               style={styles.workflowGradient}
@@ -242,28 +285,50 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ height: 100 }} />
       </ScrollView>
 
+      {/* FAB */}
       <FAB
         icon="plus"
         style={styles.fab}
         color="#fff"
-        onPress={() => {}}
+        onPress={() => navigation.navigate('ComposeEmail')}
       />
 
+      {/* Bottom Navigation */}
       <Surface style={styles.bottomNav} elevation={8}>
         <View style={styles.navItem}>
-          <IconButton icon="home" size={26} iconColor="#667eea" />
+          <IconButton 
+            icon="home" 
+            size={26} 
+            iconColor="#667eea"
+            onPress={() => {}}
+          />
           <Text style={styles.navLabelActive}>Home</Text>
         </View>
         <View style={styles.navItem}>
-          <IconButton icon="email-outline" size={26} iconColor="#94A3B8" />
+          <IconButton 
+            icon="email-outline" 
+            size={26} 
+            iconColor="#94A3B8"
+            onPress={() => navigation.navigate('EmailList')}
+          />
           <Text style={styles.navLabel}>Emails</Text>
         </View>
         <View style={styles.navItem}>
-          <IconButton icon="cog-outline" size={26} iconColor="#94A3B8" />
-          <Text style={styles.navLabel}>Workflow</Text>
+          <IconButton 
+            icon="cog-outline" 
+            size={26} 
+            iconColor="#94A3B8"
+            onPress={() => navigation.navigate('Settings')}
+          />
+          <Text style={styles.navLabel}>Settings</Text>
         </View>
         <View style={styles.navItem}>
-          <IconButton icon="account-outline" size={26} iconColor="#94A3B8" />
+          <IconButton 
+            icon="account-outline" 
+            size={26} 
+            iconColor="#94A3B8"
+            onPress={() => navigation.navigate('Profile')}
+          />
           <Text style={styles.navLabel}>Profile</Text>
         </View>
       </Surface>
@@ -635,4 +700,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default HomeScreen;// HomeScreen.js
