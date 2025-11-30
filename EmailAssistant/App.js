@@ -1,10 +1,8 @@
-// App.js - Static Navigation Configuration (Functional)
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-// Import all screens
 import LoginScreen from './Screens/LoginScreen';
 import SignUpScreen from './Screens/SignUpScreen';
 import HomeScreen from './Screens/HomeScreen';
@@ -16,10 +14,8 @@ import NotificationsScreen from './Screens/NotificationsScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 
-// Create Stack
 const Stack = createNativeStackNavigator();
 
-// Define screens object (static-looking)
 const screens = {
   Login: {
     screen: LoginScreen,
