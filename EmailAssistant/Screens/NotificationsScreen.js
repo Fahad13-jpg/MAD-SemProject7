@@ -1,6 +1,6 @@
 // NotificationsScreen.js
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { 
   Card, 
   Text, 
@@ -12,6 +12,11 @@ import {
   Divider
 } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+
+// Replace these with your actual RapidAPI keys
+const RAPIDAPI_KEY = 'fd1f757311mshddaf7a541332913p188a75jsna1b4eac9d91e';
+const RAPIDAPI_HOST = 'free-chatgpt-api.p.rapidapi.com';
+
 
 const NotificationsScreen = ({ navigation }) => {
   const notifications = [
@@ -68,6 +73,33 @@ const NotificationsScreen = ({ navigation }) => {
   ];
 
   const unreadCount = notifications.filter(n => n.unread).length;
+
+  // Function to test the API
+  const testAPI = async () => {
+    try {
+      const response = await fetch(
+      'https://free-chatgpt-api.p.rapidapi.com/chat-completion-one?prompt=hello',
+      {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+           'x-rapidapi-host': 'free-chatgpt-api.p.rapidapi.com',
+          'x-rapidapi-key': 'fd1f757311mshddaf7a541332913p188a75jsn',
+        },
+        body: JSON.stringify({
+          query: "Say hello in a friendly tone."
+        })
+      });
+
+      const result = await response.json();
+      console.log("API RESULT:", result);
+      Alert.alert("API Response", result.text || "No text returned");
+
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Error", "API error, check logs");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -162,7 +194,7 @@ const NotificationsScreen = ({ navigation }) => {
         ))}
       </ScrollView>
 
-      {/* Clear All Button */}
+      {/* Bottom Buttons */}
       <Surface style={styles.bottomContainer} elevation={4}>
         <Button
           mode="outlined"
@@ -172,6 +204,16 @@ const NotificationsScreen = ({ navigation }) => {
           textColor="#EF4444"
         >
           Clear All Notifications
+        </Button>
+
+        {/* API Test Button */}
+        <Button
+          mode="contained"
+          icon="robot"
+          onPress={testAPI}
+          style={[styles.clearButton, { marginTop: 10 }]}
+        >
+          TEST API
         </Button>
       </Surface>
     </View>
