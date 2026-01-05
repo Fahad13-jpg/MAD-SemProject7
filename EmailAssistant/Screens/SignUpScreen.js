@@ -1,6 +1,6 @@
-// SignUpScreen.js
+// SignUpScreen.js - With Firebase Registration
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { 
   TextInput, 
   Button, 
@@ -11,9 +11,11 @@ import {
   Checkbox, 
   ProgressBar,
   Surface,
-  Chip
+  Chip,
+  ActivityIndicator
 } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import AuthService from '../services/AuthService';
 
 const SignUpScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
@@ -22,34 +24,77 @@ const SignUpScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
+    // Validation
     if (!fullName || !email || !password || !confirmPassword) {
-      alert('Please fill all fields');
+      Alert.alert('Error', 'Please fill all fields');
       return;
     }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      Alert.alert('Error', 'Passwords do not match');
       return;
     }
+
     if (!agreeTerms) {
-      alert('Please agree to Terms and Conditions');
+      Alert.alert('Error', 'Please agree to Terms and Conditions');
       return;
     }
-    navigation.navigate('Home');
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Call Firebase signup
+      const result = await AuthService.signUp(fullName, email, password);
+
+      if (result.success) {
+        Alert.alert(
+          'Success! 🎉', 
+          `Account created for ${fullName}!\n\nPlease login with your credentials.`,
+          [
+            { text: 'Go to Login', onPress: () => navigation.navigate('Login') }
+          ]
+        );
+      } else {
+        Alert.alert('Registration Failed', result.error);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Password strength calculation - Matching color theme
+  // Password strength calculation
   const passwordStrength = Math.min(password.length / 12, 1);
   const getStrengthColor = () => {
-    if (password.length < 8) return '#EF4444';
-    if (password.length < 10) return '#F59E0B';
+    if (password.length < 6) return '#EF4444';
+    if (password.length < 8) return '#F59E0B';
     return '#10B981';
+  };
+  const getStrengthText = () => {
+    if (password.length < 6) return 'Weak';
+    if (password.length < 8) return 'Good';
+    return 'Strong';
   };
 
   return (
     <View style={styles.container}>
-      {/* Header with Gradient - Matching Home/Login Screen */}
+      {/* Header */}
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.header}
@@ -82,11 +127,8 @@ const SignUpScreen = ({ navigation }) => {
               mode="outlined"
               left={<TextInput.Icon icon="account" color="#667eea" />}
               style={styles.input}
-              theme={{
-                colors: {
-                  primary: '#667eea',
-                },
-              }}
+              theme={{ colors: { primary: '#667eea' } }}
+              disabled={loading}
             />
 
             {/* Email */}
@@ -99,11 +141,8 @@ const SignUpScreen = ({ navigation }) => {
               keyboardType="email-address"
               autoCapitalize="none"
               style={styles.input}
-              theme={{
-                colors: {
-                  primary: '#667eea',
-                },
-              }}
+              theme={{ colors: { primary: '#667eea' } }}
+              disabled={loading}
             />
 
             {/* Password */}
@@ -121,14 +160,11 @@ const SignUpScreen = ({ navigation }) => {
                 />
               }
               style={styles.input}
-              theme={{
-                colors: {
-                  primary: '#667eea',
-                },
-              }}
+              theme={{ colors: { primary: '#667eea' } }}
+              disabled={loading}
             />
 
-            {/* Password Strength Indicator */}
+            {/* Password Strength */}
             {password.length > 0 && (
               <View style={styles.strengthContainer}>
                 <ProgressBar 
@@ -137,12 +173,12 @@ const SignUpScreen = ({ navigation }) => {
                   style={styles.progressBar} 
                 />
                 <Chip 
-                  icon={password.length >= 8 ? "check" : "alert"}
+                  icon={password.length >= 6 ? "check" : "alert"}
                   compact
                   style={[styles.strengthChip, { backgroundColor: getStrengthColor() }]}
                   textStyle={styles.chipText}
                 >
-                  {password.length < 8 ? 'Weak' : password.length < 10 ? 'Good' : 'Strong'}
+                  {getStrengthText()}
                 </Chip>
               </View>
             )}
@@ -156,12 +192,19 @@ const SignUpScreen = ({ navigation }) => {
               secureTextEntry={!showPassword}
               left={<TextInput.Icon icon="lock-check" color="#667eea" />}
               style={styles.input}
-              theme={{
-                colors: {
-                  primary: '#667eea',
-                },
-              }}
+              theme={{ colors: { primary: '#667eea' } }}
+              disabled={loading}
             />
+
+            {/* Password Match Indicator */}
+            {confirmPassword.length > 0 && (
+              <Text style={[
+                styles.matchText, 
+                { color: password === confirmPassword ? '#10B981' : '#EF4444' }
+              ]}>
+                {password === confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
+              </Text>
+            )}
 
             {/* Terms Checkbox */}
             <Surface style={styles.checkboxSurface} elevation={1}>
@@ -183,8 +226,13 @@ const SignUpScreen = ({ navigation }) => {
               contentStyle={styles.signupButtonContent}
               style={styles.signupButton}
               buttonColor="#667eea"
+              disabled={loading}
             >
-              Create My Account
+              {loading ? (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
+                'Create My Account'
+              )}
             </Button>
 
             {/* Divider */}
@@ -221,6 +269,13 @@ const SignUpScreen = ({ navigation }) => {
             </View>
           </Card.Content>
         </Card>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            🔐 Data stored securely in Firebase
+          </Text>
+        </View>
 
         <View style={{ height: 30 }} />
       </ScrollView>
@@ -292,6 +347,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: 'bold',
   },
+  matchText: {
+    fontSize: 12,
+    marginBottom: 10,
+    marginTop: -5,
+  },
   checkboxSurface: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -360,6 +420,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#667eea',
   },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  footerText: {
+    fontSize: 12,
+    opacity: 0.6,
+    color: '#64748B',
+  },
 });
 
-export default SignUpScreen;// SignUpScreen.js
+export default SignUpScreen;

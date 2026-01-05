@@ -1,6 +1,6 @@
-// LoginScreen.js
+// LoginScreen.js - With Firebase Authentication
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { 
   TextInput, 
   Button, 
@@ -8,26 +8,51 @@ import {
   Card, 
   Divider, 
   IconButton,
-  Surface
+  Surface,
+  ActivityIndicator
 } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthService from '../services/AuthService';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (email && password) {
-      navigation.navigate('Home');
-    } else {
-      alert('Please enter email and password');
+  const handleLogin = async () => {
+    // Validation
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter email and password');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Call Firebase login
+      const result = await AuthService.login(email, password);
+
+      if (result.success) {
+        // Save user to AsyncStorage for session
+        await AsyncStorage.setItem('currentUser', JSON.stringify(result.user));
+        
+        Alert.alert('Success', `Welcome back, ${result.user.fullName}!`);
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Login Failed', result.error);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header with Gradient - Matching Home Screen */}
+      {/* Header with Gradient */}
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.header}
@@ -41,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.appSubtitle}>Powered by AI & N8N</Text>
       </LinearGradient>
 
-      {/* Floating Login Card */}
+      {/* Login Card */}
       <Card style={styles.loginCard} elevation={8}>
         <Card.Content>
           <Text style={styles.welcomeTitle}>Welcome Back! 👋</Text>
@@ -59,11 +84,8 @@ const LoginScreen = ({ navigation }) => {
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
-            theme={{
-              colors: {
-                primary: '#667eea',
-              },
-            }}
+            theme={{ colors: { primary: '#667eea' } }}
+            disabled={loading}
           />
 
           {/* Password Input */}
@@ -81,17 +103,14 @@ const LoginScreen = ({ navigation }) => {
               />
             }
             style={styles.input}
-            theme={{
-              colors: {
-                primary: '#667eea',
-              },
-            }}
+            theme={{ colors: { primary: '#667eea' } }}
+            disabled={loading}
           />
 
           {/* Forgot Password */}
           <Button 
             mode="text" 
-            onPress={() => {}} 
+            onPress={() => Alert.alert('Info', 'Contact admin to reset password')} 
             compact
             style={styles.forgotButton}
             labelStyle={{ color: '#667eea' }}
@@ -106,25 +125,30 @@ const LoginScreen = ({ navigation }) => {
             contentStyle={styles.loginButtonContent}
             style={styles.loginButton}
             buttonColor="#667eea"
+            disabled={loading}
           >
-            Login to Dashboard
+            {loading ? (
+              <ActivityIndicator color="white" size="small" />
+            ) : (
+              'Login to Dashboard'
+            )}
           </Button>
 
-          {/* Divider with Text */}
+          {/* Divider */}
           <View style={styles.dividerContainer}>
             <Divider style={styles.divider} />
             <Text style={styles.dividerText}>OR CONTINUE WITH</Text>
             <Divider style={styles.divider} />
           </View>
 
-          {/* Social Login Buttons */}
+          {/* Social Login */}
           <View style={styles.socialContainer}>
             <Surface style={styles.socialButton} elevation={2}>
               <IconButton 
                 icon="google" 
                 size={28} 
                 iconColor="#EA4335"
-                onPress={() => {}}
+                onPress={() => Alert.alert('Coming Soon', 'Google login coming soon!')}
               />
               <Text style={styles.socialText}>Google</Text>
             </Surface>
@@ -134,7 +158,7 @@ const LoginScreen = ({ navigation }) => {
                 icon="facebook" 
                 size={28} 
                 iconColor="#1877F2"
-                onPress={() => {}}
+                onPress={() => Alert.alert('Coming Soon', 'Facebook login coming soon!')}
               />
               <Text style={styles.socialText}>Facebook</Text>
             </Surface>
@@ -144,7 +168,7 @@ const LoginScreen = ({ navigation }) => {
                 icon="microsoft" 
                 size={28} 
                 iconColor="#00A4EF"
-                onPress={() => {}}
+                onPress={() => Alert.alert('Coming Soon', 'Outlook login coming soon!')}
               />
               <Text style={styles.socialText}>Outlook</Text>
             </Surface>
@@ -168,7 +192,7 @@ const LoginScreen = ({ navigation }) => {
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          🔐 Secured with 256-bit Encryption
+          🔐 Data stored securely in Firebase
         </Text>
       </View>
 
@@ -305,4 +329,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;// LoginScreen.js
+export default LoginScreen;

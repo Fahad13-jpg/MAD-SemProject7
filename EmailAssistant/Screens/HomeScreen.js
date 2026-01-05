@@ -1,10 +1,41 @@
-// HomeScreen.js
+// HomeScreen.js - Updated (Bottom Nav Removed - Now using Tab Navigator)
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Card, IconButton, Surface, Avatar, Badge, FAB } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image, TouchableOpacity } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
+const [profilePicture, setProfilePicture] = useState(null);
+const [userName, setUserName] = useState('John');
+
+useEffect(() => {
+  loadProfileData();
+}, []);
+
+useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
+    loadProfileData();
+  });
+  return unsubscribe;
+}, [navigation]);
+
+const loadProfileData = async () => {
+  try {
+    const savedPicture = await AsyncStorage.getItem('profilePicture');
+    if (savedPicture) setProfilePicture(savedPicture);
+    
+    const savedUser = await AsyncStorage.getItem('currentUser');
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      setUserName(user.fullName?.split(' ')[0] || 'John');
+    }
+  } catch (error) {
+    console.log('Error:', error);
+  }
+};
   return (
     <View style={styles.container}>
       {/* Header with Gradient */}
@@ -16,18 +47,18 @@ const HomeScreen = ({ navigation }) => {
       >
         <View style={styles.headerContent}>
           <View style={styles.headerLeft}>
-            <Avatar.Text
-              size={50}
-              label="JD"
-              style={styles.avatar}
-              labelStyle={styles.avatarLabel}
-            />
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+  {profilePicture ? (
+    <Image source={{ uri: profilePicture }} style={styles.profileImage} />
+  ) : (
+    <Avatar.Text size={50} label="JD" style={styles.avatar} labelStyle={styles.avatarLabel} />
+  )}
+</TouchableOpacity>
             <View style={styles.greetingContainer}>
-              <Text style={styles.greeting}>Hello, John! 👋</Text>
+<Text style={styles.greeting}>Hello, {userName}! 👋</Text>
               <Text style={styles.subGreeting}>Welcome back to dashboard</Text>
             </View>
           </View>
-
           <View style={styles.headerRight}>
             <IconButton
               icon="bell"
@@ -282,7 +313,8 @@ const HomeScreen = ({ navigation }) => {
           </Card>
         </View>
 
-        <View style={{ height: 100 }} />
+        {/* Extra space for FAB */}
+        <View style={{ height: 80 }} />
       </ScrollView>
 
       {/* FAB */}
@@ -292,46 +324,6 @@ const HomeScreen = ({ navigation }) => {
         color="#fff"
         onPress={() => navigation.navigate('ComposeEmail')}
       />
-
-      {/* Bottom Navigation */}
-      <Surface style={styles.bottomNav} elevation={8}>
-        <View style={styles.navItem}>
-          <IconButton 
-            icon="home" 
-            size={26} 
-            iconColor="#667eea"
-            onPress={() => {}}
-          />
-          <Text style={styles.navLabelActive}>Home</Text>
-        </View>
-        <View style={styles.navItem}>
-          <IconButton 
-            icon="email-outline" 
-            size={26} 
-            iconColor="#94A3B8"
-            onPress={() => navigation.navigate('EmailList')}
-          />
-          <Text style={styles.navLabel}>Emails</Text>
-        </View>
-        <View style={styles.navItem}>
-          <IconButton 
-            icon="cog-outline" 
-            size={26} 
-            iconColor="#94A3B8"
-            onPress={() => navigation.navigate('Settings')}
-          />
-          <Text style={styles.navLabel}>Settings</Text>
-        </View>
-        <View style={styles.navItem}>
-          <IconButton 
-            icon="account-outline" 
-            size={26} 
-            iconColor="#94A3B8"
-            onPress={() => navigation.navigate('Profile')}
-          />
-          <Text style={styles.navLabel}>Profile</Text>
-        </View>
-      </Surface>
     </View>
   );
 };
@@ -378,6 +370,7 @@ const styles = StyleSheet.create({
     color: '#E0E7FF',
     marginTop: 2,
   },
+  profileImage: { width: 50, height: 50, borderRadius: 25, borderWidth: 2, borderColor: 'white' },
   headerRight: {
     position: 'relative',
   },
@@ -667,37 +660,9 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 20,
-    bottom: 90,
+    bottom: 20,
     backgroundColor: '#667eea',
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navLabel: {
-    fontSize: 11,
-    color: '#94A3B8',
-    fontWeight: '500',
-    marginTop: -8,
-  },
-  navLabelActive: {
-    fontSize: 11,
-    color: '#667eea',
-    fontWeight: '700',
-    marginTop: -8,
   },
 });
 
-export default HomeScreen;// HomeScreen.js
+export default HomeScreen;

@@ -1,70 +1,106 @@
-// SettingsScreen.js
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { 
-  Card, 
-  Text, 
-  IconButton, 
-  List,
-  Switch,
-  Divider,
-  Button,
-  Surface
-} from 'react-native-paper';
+// Screens/SettingsScreen.js - With Working Dark Mode
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Card, Text, IconButton, List, Switch, Divider, Button } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useApp } from '../context/AppContext';
 
 const SettingsScreen = ({ navigation }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, isDarkMode, toggleDarkMode } = useApp();
   const [notifications, setNotifications] = useState(true);
   const [autoSync, setAutoSync] = useState(true);
 
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const savedNotifications = await AsyncStorage.getItem('notifications');
+      const savedAutoSync = await AsyncStorage.getItem('autoSync');
+      if (savedNotifications !== null) setNotifications(JSON.parse(savedNotifications));
+      if (savedAutoSync !== null) setAutoSync(JSON.parse(savedAutoSync));
+    } catch (error) {
+      console.log('Error loading settings:', error);
+    }
+  };
+
+  const saveSetting = async (key, value) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.log('Error saving:', error);
+    }
+  };
+
+  const handleNotifications = (value) => { 
+    setNotifications(value); 
+    saveSetting('notifications', value); 
+  };
+  
+  const handleAutoSync = (value) => { 
+    setAutoSync(value); 
+    saveSetting('autoSync', value); 
+  };
+
+  const handleDarkModeToggle = () => {
+    toggleDarkMode();
+    Alert.alert(
+      isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode',
+      isDarkMode ? 'Switched to Light Mode' : 'Switched to Dark Mode'
+    );
+  };
+
+  const styles = createStyles(theme);
+
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        style={styles.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
+      <LinearGradient colors={theme.colors.headerGradient} style={styles.header}>
         <View style={styles.headerContent}>
-          <IconButton
-            icon="arrow-left"
-            iconColor="white"
-            size={24}
-            onPress={() => navigation.goBack()}
-          />
-          <Text style={styles.headerTitle}>Settings</Text>
+          <IconButton icon="arrow-left" iconColor="white" size={24} onPress={() => navigation.goBack()} />
+          <Text style={styles.headerTitle}>⚙️ Settings</Text>
           <View style={{ width: 48 }} />
         </View>
       </LinearGradient>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Account Section */}
+        {/* Device Features */}
         <Card style={styles.card} elevation={2}>
           <Card.Title 
-            title="Account" 
-            titleVariant="titleLarge"
-            left={(props) => <List.Icon {...props} icon="account" />}
+            title="Device Features" 
+            titleStyle={styles.cardTitleText}
+            left={(props) => <List.Icon {...props} icon="cellphone" color={theme.colors.primary} />} 
           />
-          <Divider />
-          
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
-            title="Email Account"
-            description="student@gmail.com"
-            left={props => <List.Icon {...props} icon="email" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
+            title="📍 Location & Map"
+            description="View your current location"
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="map-marker" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textSecondary} />}
+            onPress={() => navigation.navigate('Map')}
           />
-
-          <Divider />
-
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
-            title="Connected Services"
-            description="Gmail, N8N Workflow"
-            left={props => <List.Icon {...props} icon="link" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
+            title="📷 Camera"
+            description="Take or upload profile photo"
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="camera" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textSecondary} />}
+            onPress={() => navigation.navigate('Camera')}
+          />
+          <Divider style={{ backgroundColor: theme.colors.border }} />
+          <List.Item
+            title="📱 Motion Sensor"
+            description="Shake to refresh emails"
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="rotate-3d-variant" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textSecondary} />}
+            onPress={() => navigation.navigate('Sensor')}
           />
         </Card>
 
@@ -72,62 +108,53 @@ const SettingsScreen = ({ navigation }) => {
         <Card style={styles.card} elevation={2}>
           <Card.Title 
             title="App Settings" 
-            titleVariant="titleLarge"
-            left={(props) => <List.Icon {...props} icon="cog" />}
+            titleStyle={styles.cardTitleText}
+            left={(props) => <List.Icon {...props} icon="cog" color={theme.colors.primary} />} 
           />
-          <Divider />
-
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
-            title="Dark Mode"
-            description="Enable dark theme"
-            left={props => <List.Icon {...props} icon="theme-light-dark" />}
+            title="🌙 Dark Mode"
+            description={isDarkMode ? "Currently: Dark Mode" : "Currently: Light Mode"}
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="theme-light-dark" color={theme.colors.primary} />}
             right={() => (
-              <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
-                color="#667eea"
+              <Switch 
+                value={isDarkMode} 
+                onValueChange={handleDarkModeToggle} 
+                color={theme.colors.primary} 
               />
             )}
           />
-
-          <Divider />
-
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
-            title="Notifications"
+            title="🔔 Notifications"
             description="Push notifications for new emails"
-            left={props => <List.Icon {...props} icon="bell" />}
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="bell" color={theme.colors.primary} />}
             right={() => (
-              <Switch
-                value={notifications}
-                onValueChange={setNotifications}
-                color="#667eea"
+              <Switch 
+                value={notifications} 
+                onValueChange={handleNotifications} 
+                color={theme.colors.primary} 
               />
             )}
           />
-
-          <Divider />
-
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
-            title="Auto Sync"
+            title="🔄 Auto Sync"
             description="Automatically sync emails"
-            left={props => <List.Icon {...props} icon="sync" />}
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="sync" color={theme.colors.primary} />}
             right={() => (
-              <Switch
-                value={autoSync}
-                onValueChange={setAutoSync}
-                color="#667eea"
+              <Switch 
+                value={autoSync} 
+                onValueChange={handleAutoSync} 
+                color={theme.colors.primary} 
               />
             )}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="Language"
-            description="English"
-            left={props => <List.Icon {...props} icon="translate" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
           />
         </Card>
 
@@ -135,173 +162,68 @@ const SettingsScreen = ({ navigation }) => {
         <Card style={styles.card} elevation={2}>
           <Card.Title 
             title="N8N Integration" 
-            titleVariant="titleLarge"
-            left={(props) => <List.Icon {...props} icon="robot" />}
+            titleStyle={styles.cardTitleText}
+            left={(props) => <List.Icon {...props} icon="robot" color={theme.colors.primary} />} 
           />
-          <Divider />
-
+          <Divider style={{ backgroundColor: theme.colors.border }} />
           <List.Item
             title="Workflow Configuration"
-            description="Manage workflow settings"
-            left={props => <List.Icon {...props} icon="cog-sync" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
+            description="Manage N8N workflow settings"
+            titleStyle={styles.listTitle}
+            descriptionStyle={styles.listDesc}
+            left={props => <List.Icon {...props} icon="cog-sync" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textSecondary} />}
             onPress={() => navigation.navigate('Workflow')}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="Filter Keywords"
-            description="Manage email filters"
-            left={props => <List.Icon {...props} icon="filter" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="Auto-Reply Templates"
-            description="Customize automatic responses"
-            left={props => <List.Icon {...props} icon="message-reply-text" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
-          />
-        </Card>
-
-        {/* Support & About */}
-        <Card style={styles.card} elevation={2}>
-          <Card.Title 
-            title="Support & About" 
-            titleVariant="titleLarge"
-            left={(props) => <List.Icon {...props} icon="information" />}
-          />
-          <Divider />
-
-          <List.Item
-            title="Help Center"
-            description="Get help and support"
-            left={props => <List.Icon {...props} icon="help-circle" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="Privacy Policy"
-            left={props => <List.Icon {...props} icon="shield-check" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="Terms of Service"
-            left={props => <List.Icon {...props} icon="file-document" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
-            onPress={() => {}}
-          />
-
-          <Divider />
-
-          <List.Item
-            title="App Version"
-            description="v1.0.0"
-            left={props => <List.Icon {...props} icon="information-outline" />}
           />
         </Card>
 
         {/* Danger Zone */}
-        <Card style={styles.dangerCard} elevation={2}>
+        <Card style={[styles.card, styles.dangerCard]} elevation={2}>
           <Card.Content>
-            <Text style={styles.dangerTitle}>Danger Zone</Text>
-            <Text style={styles.dangerSubtitle}>
-              Irreversible actions
-            </Text>
-
-            <Button
-              mode="outlined"
-              icon="logout"
-              onPress={() => navigation.navigate('Login')}
+            <Text style={styles.dangerTitle}>⚠️ Danger Zone</Text>
+            <Button 
+              mode="outlined" 
+              icon="logout" 
+              onPress={() => {
+                Alert.alert('Logout', 'Are you sure?', [
+                  { text: 'Cancel', style: 'cancel' },
+                  { 
+                    text: 'Logout', 
+                    style: 'destructive',
+                    onPress: async () => {
+                      await AsyncStorage.multiRemove(['currentUser', 'profilePicture']);
+                      navigation.navigate('Login');
+                    }
+                  },
+                ]);
+              }} 
+              textColor="#EF4444" 
               style={styles.dangerButton}
-              textColor="#EF4444"
             >
               Logout
-            </Button>
-
-            <Button
-              mode="outlined"
-              icon="delete"
-              onPress={() => {}}
-              style={styles.dangerButton}
-              textColor="#EF4444"
-            >
-              Delete Account
             </Button>
           </Card.Content>
         </Card>
 
-        <View style={{ height: 20 }} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-  },
-  header: {
-    paddingTop: 50,
-    paddingBottom: 20,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-    flex: 1,
-    textAlign: 'center',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  card: {
-    borderRadius: 20,
-    marginBottom: 15,
-  },
-  dangerCard: {
-    borderRadius: 20,
-    backgroundColor: '#FEF2F2',
-    marginBottom: 15,
-  },
-  dangerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#EF4444',
-    marginBottom: 5,
-  },
-  dangerSubtitle: {
-    fontSize: 13,
-    color: '#64748B',
-    marginBottom: 15,
-  },
-  dangerButton: {
-    marginBottom: 10,
-    borderColor: '#FEE2E2',
-    borderRadius: 12,
-  },
+const createStyles = (theme) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: theme.colors.background },
+  header: { paddingTop: 50, paddingBottom: 20, borderBottomLeftRadius: 25, borderBottomRightRadius: 25 },
+  headerContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10 },
+  headerTitle: { fontSize: 20, fontWeight: 'bold', color: 'white' },
+  content: { flex: 1, padding: 20 },
+  card: { borderRadius: 20, marginBottom: 15, backgroundColor: theme.colors.card },
+  cardTitleText: { color: theme.colors.text },
+  listTitle: { color: theme.colors.text },
+  listDesc: { color: theme.colors.textSecondary },
+  dangerCard: { backgroundColor: theme.dark ? '#3B1A1A' : '#FEF2F2' },
+  dangerTitle: { fontSize: 18, fontWeight: 'bold', color: '#EF4444', marginBottom: 15 },
+  dangerButton: { borderColor: '#FEE2E2', borderRadius: 12 },
 });
 
 export default SettingsScreen;
