@@ -380,40 +380,50 @@ A modern, AI-powered Email Assistant mobile application built with React Native 
 ## 📁 Project Structure
 
 EmailAssistant/
-├── 📄 App.js # Main entry point with navigation
-├── 📄 index.js # App registration
-├── 📄 package.json # Dependencies
-├── 📄 app.json # Expo configuration
 │
-├── 📁 Screens/ # All app screens
-│ ├── LoginScreen.js # User login
-│ ├── SignUpScreen.js # User registration
-│ ├── HomeScreen.js # Dashboard
-│ ├── EmailListScreen.js # Email inbox
-│ ├── EmailDetailScreen.js # View email
-│ ├── ComposeEmailScreen.js # Write email
-│ ├── WorkflowScreen.js # N8N workflow
-│ ├── NotificationsScreen.js # Notifications
-│ ├── SettingsScreen.js # App settings
-│ ├── ProfileScreen.js # User profile
-│ ├── MapScreen.js # GPS location
-│ ├── CameraScreen.js # Camera feature
-│ └── SensorScreen.js # Motion sensor
+├── 📄 App.js                          # Main entry point - Navigation setup
+├── 📄 index.js                        # App registration for Expo
+├── 📄 package.json                    # Project dependencies
+├── 📄 app.json                        # Expo configuration
+├── 📄 README.md                       # Project documentation
+├── 📄 .gitignore                      # Git ignore rules
 │
-├── 📁 components/ # Reusable components
-│ ├── EmailCard.js # Email list item
-│ ├── CustomButton.js # Gradient button
-│ └── StatCard.js # Statistics card (Class component)
+├── 📁 Screens/                        # All Application Screens
+│   │
+│   ├── 📄 LoginScreen.js              # User login page
+│   ├── 📄 SignUpScreen.js             # User registration page
+│   ├── 📄 HomeScreen.js               # Main dashboard
+│   ├── 📄 EmailListScreen.js          # Email inbox with FlatList
+│   ├── 📄 EmailDetailScreen.js        # View single email + AI reply
+│   ├── 📄 ComposeEmailScreen.js       # Write new email + AI compose
+│   ├── 📄 WorkflowScreen.js           # N8N workflow status
+│   ├── 📄 NotificationsScreen.js      # Notifications list
+│   ├── 📄 SettingsScreen.js           # App settings + Dark mode
+│   ├── 📄 ProfileScreen.js            # User profile + Photo
+│   ├── 📄 MapScreen.js                # GPS location feature
+│   ├── 📄 CameraScreen.js             # Camera + Gallery upload
+│   └── 📄 SensorScreen.js             # Motion sensor + Shake detection
 │
-├── 📁 context/ # Global state
-│ └── AppContext.js # Theme & user context
+├── 📁 components/                     # Reusable UI Components
+│   │
+│   ├── 📄 EmailCard.js                # Custom email list item (Props)
+│   ├── 📄 CustomButton.js             # Gradient button component
+│   └── 📄 StatCard.js                 # Statistics card (Class Component)
 │
-├── 📁 services/ # Backend services
-│ ├── firebase.js # Firebase configuration
-│ ├── AuthService.js # Authentication logic
-│ └── EmailService.js # Email CRUD operations
+├── 📁 context/                        # Global State Management
+│   │
+│   └── 📄 AppContext.js               # Theme + User context (Context API)
 │
-└── 📁 assets/ # Images and icons
-├── icon.png
-├── splash-icon.png
-└── adaptive-icon.png
+├── 📁 services/                       # Backend Services
+│   │
+│   ├── 📄 firebase.js                 # Firebase configuration
+│   ├── 📄 AuthService.js              # Login/Signup (ES6 Class + CRUD)
+│   └── 📄 EmailService.js             # Email operations (ES6 Class)
+│
+├── 📁 assets/                         # Static Assets
+│   │
+│   ├── 🖼️ icon.png                    # App icon
+│   ├── 🖼️ splash-icon.png             # Splash screen icon
+│   └── 🖼️ adaptive-icon.png           # Android adaptive icon
+│
+└── 📁 node_modules/                   # Dependencies (auto-generated)
